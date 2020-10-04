@@ -3,41 +3,36 @@ import praw
 
 reddit = praw.Reddit('PostNotificationBot')
 
+# This is the subreddit that you'll be searching your keywors on
 subreddit = reddit.subreddit("watchexchange")
 
-keyword = "seiko"
+# These are all the possible matches that you'll be looking for
+keywords = ['samurai', 'srpd23', 'sbdy029' ]
 
-url = "http://reddit.com"
+pmTitle = "Match found for "
 
-pmTitle = "Match found for " + keyword
-
-pmBody = "A new post including your keywords was found! Here is the link: "
+pmBody = "A new post including one of your keywords was found! Here is the link: "
 
 messagesBodyUrl = []
-
-def sumbission_already_sent(url):
-    for message in messagesBodyUrl:
-        if url in message:
-            print('message repeated, will not send')
-            return bool(True)
-        else: 
-            return bool(False)
-        
 
 for message in reddit.inbox.messages(limit=10):
     if pmTitle in message.subject:
         messagesBodyUrl.append(message.body)
+        
+        
+def sumbission_already_sent(submission_url):
+    return any(submission.shortlink in x for x in messagesBodyUrl)
 
 for submission in subreddit.new(limit=10):
-    print("Title: ", submission.title)
-    
-    if keyword in submission.title.lower():
-        url = url + submission.permalink
-        is_sent = sumbission_already_sent(url)
-        if not is_sent:
-            print('Messages will be sent')
-            pmBody = pmBody + url
-            reddit.redditor("PossibleFailure").message(pmTitle, pmBody)
+    #print("Title: ", submission.title)
+    for keyword in keywords:
+        if keyword in submission.title.lower():
+            #print('There was a match!')
+            is_sent = sumbission_already_sent(submission.shortlink)
+            #print('Match sent: ' + str(is_sent))
+            if not is_sent:
+                print('Messages will be sent')
+                reddit.redditor("PossibleFailure").message(pmTitle + "'" + keyword + "'", pmBody + submission.shortlink)
         
 
 
