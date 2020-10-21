@@ -23,7 +23,7 @@ for message in reddit.inbox.messages(limit=10):
 def sumbission_already_sent(submission_url):
     return any(submission.shortlink in x for x in messagesBodyUrl)
 
-for submission in subreddit.hot(limit=30):
+for submission in subreddit.hot(limit=50):
     #print("Title: ", submission.title)
     for keyword in keywords:
         if keyword in submission.title.lower():
