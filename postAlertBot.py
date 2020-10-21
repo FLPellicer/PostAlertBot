@@ -7,7 +7,7 @@ reddit = praw.Reddit('PostNotificationBot')
 subreddit = reddit.subreddit("watchexchange")
 
 # These are all the possible matches that you'll be looking for
-keywords = ['samurai', 'srpd23', 'sbdy029' ]
+keywords = ['sbdy029', 'srpd23', 'samurai' ]
 
 pmTitle = "Match found for "
 
@@ -23,7 +23,7 @@ for message in reddit.inbox.messages(limit=10):
 def sumbission_already_sent(submission_url):
     return any(submission.shortlink in x for x in messagesBodyUrl)
 
-for submission in subreddit.new(limit=10):
+for submission in subreddit.new(limit=15):
     #print("Title: ", submission.title)
     for keyword in keywords:
         if keyword in submission.title.lower():
@@ -33,6 +33,8 @@ for submission in subreddit.new(limit=10):
             if not is_sent:
                 print('Messages will be sent')
                 reddit.redditor("PossibleFailure").message(pmTitle + "'" + keyword + "'", pmBody + submission.shortlink)
+        break    
+            
         
 
 
