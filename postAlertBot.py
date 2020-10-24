@@ -23,13 +23,13 @@ for message in reddit.inbox.messages(limit=10):
 def sumbission_already_sent(submission_url):
     return any(submission.shortlink in x for x in messagesBodyUrl)
 
-for submission in subreddit.hot(limit=50):
-    #print("Title: ", submission.title)
+for submission in subreddit.new(limit=15):
+    print("Title: ", submission.title)
     for keyword in keywords:
         if keyword in submission.title.lower():
-            #print('There was a match!')
+            print('There was a match!')
             is_sent = sumbission_already_sent(submission.shortlink)
-            #print('Match sent: ' + str(is_sent))
+            print('Match sent: ' + str(is_sent))
             if not is_sent:
                 print('Messages will be sent')
                 reddit.redditor("PossibleFailure").message(pmTitle + "'" + keyword + "'", pmBody + submission.shortlink)
