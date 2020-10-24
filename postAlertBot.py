@@ -1,7 +1,15 @@
 #!/usr/bin/python
 import praw
+from os import environ
 
-reddit = praw.Reddit('PostNotificationBot')
+
+reddit = praw.Reddit(
+    client_id = environ['client_id'],
+    client_secret = environ['client_secret'],
+    password = environ['password'],
+    user_agent = environ['user_agent'],
+    username = environ['username']
+ )
 
 # This is the subreddit that you'll be searching your keywors on
 subreddit = reddit.subreddit("watchexchange")
